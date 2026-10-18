@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     private var lastTenant: Tenant? = null
 
+    private var saveCount = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TENANT_LIFECYCLE", "MainActivity: onCreate")
@@ -32,6 +34,12 @@ class MainActivity : AppCompatActivity() {
 
                 lastTenant = tenant
                 binding.tenant = tenant
+            }
+
+            saveCount = savedInstanceState.getInt("save_count", 0)
+
+            if (saveCount > 0) {
+                Toast.makeText(this, "SAVE tapped $saveCount time(s)", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -66,6 +74,8 @@ class MainActivity : AppCompatActivity() {
             binding.tenantNameEditText.text.clear()
             binding.phoneEditText.text.clear()
             binding.rentEditText.text.clear()
+
+            saveCount++
         }
 
         binding.callButton.setOnClickListener {
@@ -104,6 +114,8 @@ class MainActivity : AppCompatActivity() {
             outState.putString("tenant_phone", tenant.phone)
             outState.putString("tenant_rent", tenant.rent)
         }
+
+        outState.putInt("save_count", saveCount)
     }
 
     override fun onStart() {
